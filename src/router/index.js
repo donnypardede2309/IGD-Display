@@ -1,31 +1,25 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import Admin from '../view/admin_page.vue';
-import View from '../view/view_page.vue';
-import LandingPage from '../view/admin_page.vue';
-
-const routes = [
-    {
-        path: '/',
-        name: 'landing-page',
-        component: LandingPage
-    },
-
-    {
-        path: '/admin',
-        name: 'admin',
-        component: Admin
-    },
-
-     {
-        path: '/view',
-        name: 'view',
-        component: View
-    },
-]
+import { createRouter, createWebHashHistory } from 'vue-router'
+import Admin from '../view/admin_page.vue'
+import View from '../view/view_page.vue'
 
 const router = createRouter({
-    history: createWebHistory(),
-    routes
+  history: createWebHashHistory(),
+  routes: [
+    {
+      path: '/',
+      redirect: '/admin'
+    },
+    {
+      path: '/admin',
+      name: 'admin',
+      component: Admin
+    },
+    {
+      path: '/view',
+      name: 'view',
+      component: View
+    }
+  ]
 })
 
 export default router
