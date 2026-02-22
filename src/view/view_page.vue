@@ -29,183 +29,63 @@
       <nav class="navbar">
         <div class="nav-container">
           <a class="nav-item" :class="{ active: activeSection === 'igd' }" @click="setSection('igd')">Pasien IGD</a>
-          <a class="nav-item" :class="{ active: activeSection === 'laboratorium' }" @click="setSection('laboratorium')">Laboratorium</a>
-          <a class="nav-item" :class="{ active: activeSection === 'radiologi' }" @click="setSection('radiologi')">Radiologi</a>
-          <a class="nav-item" :class="{ active: activeSection === 'rawat-inap' }" @click="setSection('rawat-inap')">Rawat Inap</a>
-          <a class="nav-item" :class="{ active: activeSection === 'pulang' }" @click="setSection('pulang')">Pasien Pulang</a>
+          <a class="nav-item" :class="{ active: activeSection === 'laboratorium' }"
+            @click="setSection('laboratorium')">Laboratorium</a>
+          <a class="nav-item" :class="{ active: activeSection === 'radiologi' }"
+            @click="setSection('radiologi')">Radiologi</a>
+          <a class="nav-item" :class="{ active: activeSection === 'rawat-inap' }"
+            @click="setSection('rawat-inap')">Rawat Inap</a>
+          <a class="nav-item" :class="{ active: activeSection === 'pulang' }" @click="setSection('pulang')">Pasien
+            Pulang</a>
         </div>
       </nav>
     </div>
 
-    <!-- ================= TABLE CONTAINER ================= -->
-    <div class="table-container">
+    <!-- ================= TABLE ================= -->
+    <div class="table-container" ref="scrollContainer">
 
-      <transition name="fade-slide" mode="out-in">
-        <div :key="activeSection">
+      <section>
+        <h2>
+          Pasien {{ activeSection.toUpperCase() }}
+        </h2>
 
-          <!-- ================= IGD ================= -->
-          <section v-if="activeSection === 'igd'">
-            <h2>Data Pasien IGD</h2>
-            <table class="custom-table">
-              <thead class="igd-table-header">
-                <tr>
-                  <th>Nama</th>
-                  <th>Jenis</th>
-                  <th>Tanggal</th>
-                  <th>Jam</th>
-                  <th>Status</th>
-                  <th>Ruangan</th>
-                  <th>No TT</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr
-                  v-for="p in daftarPasien"
-                  :key="p.id"
-                  :class="{ highlighted: highlightedIds.includes(p.id) }"
-                >
-                  <td>{{ p.nama }}</td>
-                  <td>{{ p.jenis }}</td>
-                  <td>{{ p.tanggalMasuk }}</td>
-                  <td>{{ p.jamMasuk }}</td>
-                  <td>{{ p.status }}</td>
-                  <td>{{ p.ruangan || 'IGD' }}</td>
-                  <td>{{ p.nomorTempatTidur }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </section>
+        <table class="custom-table">
+          <thead>
+            <tr>
+              <th>Nama</th>
+              <th>Jenis</th>
+              <th>Tanggal</th>
+              <th>Jam</th>
+              <th>Status</th>
+              <th>Ruangan</th>
+              <th>No TT</th>
+            </tr>
+          </thead>
 
-          <!-- ================= LAB ================= -->
-          <section v-else-if="activeSection === 'laboratorium'">
-            <h2>Data Pasien Laboratorium</h2>
-            <table class="custom-table">
-              <thead class="laboratorium-table-header">
-                <tr>
-                  <th>Nama</th>
-                  <th>Jenis</th>
-                  <th>Tanggal</th>
-                  <th>Jam</th>
-                  <th>Status</th>
-                  <th>Ruangan</th>
-                  <th>No TT</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="p in pasienLabor" :key="p.id">
-                  <td>{{ p.nama }}</td>
-                  <td>{{ p.jenis }}</td>
-                  <td>{{ p.tanggalMasuk }}</td>
-                  <td>{{ p.jamMasuk }}</td>
-                  <td>{{ p.status }}</td>
-                  <td>Laboratorium</td>
-                  <td>{{ p.nomorTempatTidur }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </section>
-
-          <!-- ================= RADIOLOGI ================= -->
-          <section v-else-if="activeSection === 'radiologi'">
-            <h2>Data Pasien Radiologi</h2>
-            <table class="custom-table">
-              <thead class="radiologi-table-header">
-                <tr>
-                  <th>Nama</th>
-                  <th>Jenis</th>
-                  <th>Tanggal</th>
-                  <th>Jam</th>
-                  <th>Status</th>
-                  <th>Ruangan</th>
-                  <th>No TT</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="p in pasienRadiologi" :key="p.id">
-                  <td>{{ p.nama }}</td>
-                  <td>{{ p.jenis }}</td>
-                  <td>{{ p.tanggalMasuk }}</td>
-                  <td>{{ p.jamMasuk }}</td>
-                  <td>{{ p.status }}</td>
-                  <td>Radiologi</td>
-                  <td>{{ p.nomorTempatTidur }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </section>
-
-          <!-- ================= RAWAT INAP ================= -->
-          <section v-else-if="activeSection === 'rawat-inap'">
-            <h2>Data Pasien Rawat Inap</h2>
-            <table class="custom-table">
-              <thead class="rawat-inap-table-header">
-                <tr>
-                  <th>Nama</th>
-                  <th>Jenis</th>
-                  <th>Tanggal</th>
-                  <th>Jam</th>
-                  <th>Status</th>
-                  <th>Ruangan</th>
-                  <th>No TT</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="p in pasienRawatInap" :key="p.id">
-                  <td>{{ p.nama }}</td>
-                  <td>{{ p.jenis }}</td>
-                  <td>{{ p.tanggalMasuk }}</td>
-                  <td>{{ p.jamMasuk }}</td>
-                  <td>{{ p.status }}</td>
-                  <td>{{ p.ruangan }}</td>
-                  <td>{{ p.nomorTempatTidur }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </section>
-
-          <!-- ================= PULANG ================= -->
-          <section v-else-if="activeSection === 'pulang'">
-            <h2>Data Pasien Pulang</h2>
-            <table class="custom-table">
-              <thead class="pulang-table-header">
-                <tr>
-                  <th>Nama</th>
-                  <th>Jenis</th>
-                  <th>Tanggal</th>
-                  <th>Jam</th>
-                  <th>Status</th>
-                  <th>Ruangan</th>
-                  <th>No TT</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="p in pasienPulang" :key="p.id">
-                  <td>{{ p.nama }}</td>
-                  <td>{{ p.jenis }}</td>
-                  <td>{{ p.tanggalMasuk }}</td>
-                  <td>{{ p.jamMasuk }}</td>
-                  <td>{{ p.status }}</td>
-                  <td>Pulang</td>
-                  <td>{{ p.nomorTempatTidur }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </section>
-
-        </div>
-      </transition>
+          <tbody>
+            <tr v-for="p in filteredData" :key="p.id" :class="{ highlighted: highlightedIds.includes(p.id) }">
+              <td>{{ p.nama }}</td>
+              <td>{{ p.jenis }}</td>
+              <td>{{ p.tanggalMasuk }}</td>
+              <td>{{ p.jamMasuk }}</td>
+              <td>{{ p.status }}</td>
+              <td>{{ p.ruangan || activeSection }}</td>
+              <td>{{ p.nomorTempatTidur }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
 
     </div>
 
     <p style="text-align: center; margin: 40px 0; font-family: 'Poppins', sans-serif; color: #757575;">
       &copy; Created by Donny Pardede.</p>
-      
+
   </div>
 </template>
 
-
 <script setup>
-import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue'
 import { supabase } from '@/lib/supabase'
 
 /* ================= STATE ================= */
@@ -213,31 +93,15 @@ import { supabase } from '@/lib/supabase'
 const activeSection = ref("igd")
 const daftarPasien = ref([])
 const highlightedIds = ref([])
-
 const sections = ['igd', 'laboratorium', 'radiologi', 'rawat-inap', 'pulang']
-
-/* =====================================================
-   DATA RUANGAN
-===================================================== */
-
-const daftarRuangan = [
-  "Ruang Yudea",
-  "Ruang Sarfat",
-  "Ruang Galilea",
-  "Ruang Samaria",
-  "Ruang Siloam",
-  "Ruang Efrata (Isolasi)"
-]
-
 
 let channel = null
 let rotateInterval = null
+let scrollInterval = null
 
-/* ================= FUNCTIONS ================= */
+const scrollContainer = ref(null)
 
-const setSection = (section) => {
-  activeSection.value = section
-}
+/* ================= FETCH DATA ================= */
 
 async function ambilData() {
   const { data, error } = await supabase
@@ -260,45 +124,52 @@ async function ambilData() {
   }
 }
 
-/* ================= FILTERED DATA ================= */
+/* ================= FILTER ================= */
 
-const pasienLabor = computed(() =>
-  daftarPasien.value.filter(p => p.layanan === "laboratorium")
-)
+const filteredData = computed(() => {
+  if (activeSection.value === 'igd') {
+    return daftarPasien.value.filter(p => !p.layanan || p.layanan === 'igd')
+  }
+  return daftarPasien.value.filter(p => p.layanan === activeSection.value)
+})
 
-const pasienRadiologi = computed(() =>
-  daftarPasien.value.filter(p => p.layanan === "radiologi")
-)
+/* ================= AUTO SCROLL WINDOW (VERSI AWAL KAMU) ================= */
 
-const pasienRawatInap = computed(() =>
-  daftarPasien.value.filter(p => p.layanan === "rawat-inap" && p.ruangan)
-)
+let isResetting = false
+let currentIndex = 0
 
-const pasienPulang = computed(() =>
-  daftarPasien.value.filter(p => p.layanan === "pulang")
-)
+function startAutoScroll() {
+  scrollInterval = setInterval(() => {
 
-// Update status based on layanan
-watch(daftarPasien, (val) => {
-  val.forEach(p => {
-    switch (p.layanan) {
-      case "laboratorium":
-        p.status = "Proses Laboratorium"
-        break
-      case "radiologi":
-        p.status = "Proses Radiologi"
-        break
-      case "rawat-inap":
-        p.status = p.ruangan ? "Sedang Dirawat" : "Menunggu Ruangan"
-        break
-      case "pulang":
-        p.status = "Sudah Pulang"
-        break
-      default:
-        p.status = "Aktif"
+    if (isResetting) return
+
+    const scrollTop = window.scrollY
+    const windowHeight = window.innerHeight
+    const fullHeight = document.documentElement.scrollHeight
+
+    if (scrollTop + windowHeight >= fullHeight - 2) {
+
+      isResetting = true
+
+      // pause 2 detik di bawah
+      setTimeout(() => {
+        currentIndex = (currentIndex + 1) % sections.length
+        activeSection.value = sections[currentIndex]
+
+        // setelah ganti section, otomatis posisi akan di atas
+        window.scrollTo(0, 0)
+
+        isResetting = false
+
+      }, 2000)
+
+      return
     }
-  })
-}, { deep: true })
+
+    window.scrollTo(0, scrollTop + 1)
+
+  }, 20)
+}
 
 /* ================= AUTO ROTATE ================= */
 
@@ -310,67 +181,36 @@ function startAutoRotate() {
   }, 10000)
 }
 
-/* ================= FULLSCREEN ================= */
+/* ================= SECTION CHANGE ================= */
 
-function enterFullScreen() {
-  const elem = document.documentElement
-  if (elem.requestFullscreen) {
-    elem.requestFullscreen().catch(() => { })
-  }
+function setSection(section) {
+  activeSection.value = section
 }
 
-/* ================= LIFECYCLE ================= */
+/* ================= REALTIME ================= */
 
 onMounted(async () => {
 
   await ambilData()
   startAutoRotate()
-  enterFullScreen()
+  startAutoScroll()
 
   channel = supabase
     .channel('antrian-channel')
-
-    // INSERT → highlight 5 detik
     .on(
       'postgres_changes',
-      {
-        event: 'INSERT',
-        schema: 'public',
-        table: 'antrian'
-      },
-      (payload) => {
-
-        highlightedIds.value.push(payload.new.id)
-
-        setTimeout(() => {
-          highlightedIds.value =
-            highlightedIds.value.filter(id => id !== payload.new.id)
-        }, 5000)
-
-        ambilData()
-      }
-    )
-
-    // UPDATE & DELETE → refresh saja
-    .on(
-      'postgres_changes',
-      {
-        event: '*',
-        schema: 'public',
-        table: 'antrian'
-      },
+      { event: '*', schema: 'public', table: 'antrian' },
       () => ambilData()
     )
-
     .subscribe()
 })
 
 onUnmounted(() => {
   if (channel) supabase.removeChannel(channel)
   if (rotateInterval) clearInterval(rotateInterval)
+  if (scrollInterval) clearInterval(scrollInterval)
 })
 </script>
-
 
 <style>
 * {
@@ -381,12 +221,8 @@ onUnmounted(() => {
 
 body {
   background-color: #e2e2e3;
-}
-
-tbody td {
-  font-family: 'Poppins', sans-serif;
-  color: #555;
-  font-weight: 500;
+  font-family: "Poppins-Regular", Helvetica;
+  overflow: hidden;
 }
 
 .section {
@@ -397,34 +233,12 @@ tbody td {
   display: none;
 }
 
-.fade-slide-enter-active,
-.fade-slide-leave-active {
-  transition: opacity 0.6s ease, transform 0.6s ease;
-}
-
-.fade-slide-enter-from {
-  opacity: 0;
-  transform: translateX(40px);
-}
-
-.fade-slide-leave-to {
-  opacity: 0;
-  transform: translateX(-40px);
-}
-
-
 .action-button {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 5px;
   width: 120px;
-}
-
-.highlight {
-  background-color: #00ff88 !important;
-  color: black !important;
-  transition: background-color 0.3s ease;
 }
 
 label {
@@ -542,7 +356,7 @@ label {
 }
 
 .input-wrapper p {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins-Regular", Helvetica;
   color: #757575;
   text-align: left;
   margin: 20px 0px;
@@ -651,6 +465,7 @@ label {
   padding: 6px 0;
   transition: 0.3s ease;
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 /* Hover effect */
@@ -667,22 +482,29 @@ label {
   width: 0%;
   height: 2px;
   background: white;
-  transition: 0.3s ease;
+  transition: width 0.4s ease;
 }
 
 .nav-item:hover::after {
   width: 100%;
 }
 
+.nav-item.active {
+  color: white;
+}
+
 /* Active menu */
 .nav-item.active::after {
-  width: 100%;
+  width: 100% !important;
 }
 
 .table-container {
-  width: 85%;
   margin: 40px auto;
   overflow-x: auto;
+  width: 95%;
+  height: 450px;
+  margin: 40px auto;
+  overflow-y: auto;
 }
 
 .custom-table {
@@ -712,7 +534,7 @@ label {
 .custom-table td {
   padding: 14px;
   border-bottom: 1px solid #eee;
-  font-weight: 600;
+  font-family: "Poppins-Regular", Helvetica;
 }
 
 th {
