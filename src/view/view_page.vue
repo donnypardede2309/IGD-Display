@@ -194,6 +194,7 @@ onMounted(async () => {
   await ambilData()
   startAutoRotate()
   startAutoScroll()
+  document.body.style.overflow = 'hidden'
 
   channel = supabase
     .channel('antrian-channel')
@@ -209,6 +210,7 @@ onUnmounted(() => {
   if (channel) supabase.removeChannel(channel)
   if (rotateInterval) clearInterval(rotateInterval)
   if (scrollInterval) clearInterval(scrollInterval)
+  document.body.style.overflow = 'auto'
 })
 </script>
 
@@ -222,7 +224,6 @@ onUnmounted(() => {
 body {
   background-color: #e2e2e3;
   font-family: "Poppins-Regular", Helvetica;
-  overflow: hidden;
 }
 
 .section {
