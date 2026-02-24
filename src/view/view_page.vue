@@ -25,18 +25,15 @@
     </div>
 
     <!-- ================= NAVBAR ================= -->
+     <!-- ================= NAVBAR ================= -->
     <div class="data-navigator">
       <nav class="navbar">
         <div class="nav-container">
           <a class="nav-item" :class="{ active: activeSection === 'igd' }" @click="setSection('igd')">Pasien IGD</a>
-          <a class="nav-item" :class="{ active: activeSection === 'laboratorium' }"
-            @click="setSection('laboratorium')">Laboratorium</a>
-          <a class="nav-item" :class="{ active: activeSection === 'radiologi' }"
-            @click="setSection('radiologi')">Radiologi</a>
-          <a class="nav-item" :class="{ active: activeSection === 'rawat-inap' }"
-            @click="setSection('rawat-inap')">Rawat Inap</a>
-          <a class="nav-item" :class="{ active: activeSection === 'pulang' }" @click="setSection('pulang')">Pasien
-            Pulang</a>
+          <a class="nav-item" :class="{ active: activeSection === 'laboratorium' }" @click="setSection('laboratorium')">Laboratorium</a>
+          <a class="nav-item" :class="{ active: activeSection === 'radiologi' }" @click="setSection('radiologi')">Radiologi</a>
+          <a class="nav-item" :class="{ active: activeSection === 'rawat-inap' }" @click="setSection('rawat-inap')">Rawat Inap</a>
+          <a class="nav-item" :class="{ active: activeSection === 'pulang' }" @click="setSection('pulang')">Pasien Pulang</a>
         </div>
       </nav>
     </div>
@@ -127,16 +124,55 @@ async function ambilData() {
 /* ================= FILTER ================= */
 
 const filteredData = computed(() => {
-  if (activeSection.value === 'igd') {
-    return daftarPasien.value.filter(p => !p.layanan || p.layanan === 'igd')
+
+  // ================= IGD =================
+if (activeSection.value === 'igd') {
+  return daftarPasien.value.filter(p =>
+    p.layanan !== 'rawat-inap' &&
+    p.layanan !== 'pulang'
+  )
+}
+
+  // ================= LAB =================
+  if (activeSection.value === 'laboratorium') {
+    return daftarPasien.value.filter(p =>
+      p.layanan === 'laboratorium'
+    )
   }
-  return daftarPasien.value.filter(p => p.layanan === activeSection.value)
+
+  // ================= RADIOLOGI =================
+  if (activeSection.value === 'radiologi') {
+    return daftarPasien.value.filter(p =>
+      p.layanan === 'radiologi'
+    )
+  }
+
+  // ================= RAWAT INAP =================
+  if (activeSection.value === 'rawat-inap') {
+    return daftarPasien.value.filter(p =>
+      p.layanan === 'rawat-inap'
+    )
+  }
+
+  // ================= PULANG =================
+  if (activeSection.value === 'pulang') {
+    return daftarPasien.value.filter(p =>
+      p.layanan === 'pulang'
+    )
+  }
+
+  return []
 })
 
 /* ================= AUTO SCROLL WINDOW (VERSI AWAL KAMU) ================= */
 
 let isResetting = false
 let currentIndex = 0
+ 
+function nextSection() {
+  currentIndex = (currentIndex + 1) % sections.length
+  activeSection.value = sections[currentIndex]
+}
 
 function startAutoScroll() {
   scrollInterval = setInterval(() => {
@@ -153,15 +189,13 @@ function startAutoScroll() {
 
       // pause 2 detik di bawah
       setTimeout(() => {
-        currentIndex = (currentIndex + 1) % sections.length
-        activeSection.value = sections[currentIndex]
 
         // setelah ganti section, otomatis posisi akan di atas
         window.scrollTo(0, 0)
 
         isResetting = false
 
-      }, 2000)
+      }, 1500)
 
       return
     }
@@ -174,10 +208,8 @@ function startAutoScroll() {
 /* ================= AUTO ROTATE ================= */
 
 function startAutoRotate() {
-  let index = 0
   rotateInterval = setInterval(() => {
-    index = (index + 1) % sections.length
-    activeSection.value = sections[index]
+    nextSection()
   }, 10000)
 }
 
@@ -186,6 +218,10 @@ function startAutoRotate() {
 function setSection(section) {
   activeSection.value = section
 }
+
+watch(activeSection, (newVal) => {
+  currentIndex = sections.indexOf(newVal)
+})
 
 /* ================= REALTIME ================= */
 
