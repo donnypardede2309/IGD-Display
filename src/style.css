@@ -1,0 +1,12 @@
+/* ADMIN */
+.admin .main-content {
+  overflow-y: auto;
+}
+
+
+
+/* VIEW DISPLAY */
+.view .main-content {
+  overflow: hidden;
+}
+
