@@ -12,9 +12,9 @@
 
         <div class="rectangle_two">
           <div class="text-wrapper-2">
-            <h1>Jalan Gereja No.17, Balige, Toba | 22314</h1>
-            <p>0852-7655-3672 | 0853-5884-8964</p>
-            <p>rshkbp@yahoo.com</p>
+            <!-- <h1>Jalan Gereja No.17, Balige, Toba | 22314</h1>
+            <!-- <p>0852-7655-3672 | 0853-5884-8964</p> -->
+            <!-- <p>rshkbp@yahoo.com</p>  -->
           </div>
         </div>
 
@@ -452,7 +452,7 @@ body {
    1. MONITOR STANDAR & LAPTOP (Default / 1080p)
    ======================================================= */
 @media (min-width: 1024px) {
-  .text-wrapper h1 { font-size: 1.8rem; }
+  .text-wrapper h1 { font-size: 2.8rem; }
   .text-wrapper p { font-size: 1.1rem; }
   
   .table-container {
@@ -545,12 +545,12 @@ label {
   background-color:#4244e1f0;
   width: 100%;
   border-radius: 0 0 20px 20px;
-  height: 256px;
+  height: 180px;
   margin: 0 20px;
   box-shadow: 0px 4px 4px #00000040;
 }
 
-.rectangle_one {
+/* .rectangle_one {
   background-color: #4245e2c7;
   width: 260px;
   height: 220px;
@@ -577,19 +577,19 @@ label {
   right: 550px;
   position: absolute;
   top: 36px;
-}
+} */
 
 .text-wrapper {
-  position: absolute;
   font-family: "Poppins-Regular", Helvetica;
   top: 10px;
   right: 40px;
   color: white;
   z-index: 1;
-  text-align: right;
+  text-align: center;
 }
 
 .text-wrapper h1 {
+  font-size: 48px;
   font-weight: 100;
   padding-top: 10px;
 }
@@ -597,7 +597,7 @@ label {
 .text-wrapper p {
   font-weight: 100;
   padding-top: 10px;
-  font-size: 21px;
+  font-size: 32px;
 }
 
 .text-wrapper-2 {
@@ -608,7 +608,7 @@ label {
   padding-top: 10px;
   color: white;
   z-index: 1;
-  text-align: right;
+  text-align: center;
 }
 
 .text-wrapper-2 h1 {
@@ -855,7 +855,7 @@ label {
   overflow-y: hidden;
   width: 100%;
   font-size: 28px;
-  font-weight: 500;
+  font-weight: 700;
 }
 
 .custom-table thead {
