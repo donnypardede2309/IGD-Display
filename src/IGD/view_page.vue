@@ -313,12 +313,19 @@ function startAutoScroll() {
   // Bersihkan interval yang lama agar tidak tumpang tindih
   clearInterval(scrollInterval);
 
-  scrollInterval = setInterval(() => {
-    // Ambil elemen dari ref. Karena ref="scrollContainer" di dalam v-if, 
- 
+  if ( filteredData.value.length <= 4 ) {
     let el = scrollContainer.value;
     if (Array.isArray(el)) el = el[0];
+    if (el) el.scrollTop = 0;
 
+    return;
+  }
+
+  // Jika lebih dari 5, jalankan interval seperti biasa
+  scrollInterval = setInterval(() => {
+
+    let el = scrollContainer.value;
+    if (Array.isArray(el)) el = el[0];
     if (!el) return;
 
     const maxScroll = el.scrollHeight - el.clientHeight;
@@ -327,13 +334,13 @@ function startAutoScroll() {
     if (maxScroll <= 0) return;
 
     // CEK: Jika sudah sampai di paling bawah
-    if (el.scrollTop >= maxScroll - 1) {
+    if (el.scrollTop >= maxScroll - 2) {
       clearInterval(scrollInterval); // Hentikan gerakan scroll
 
       setTimeout(() => {
         if (el) {
           
-          el.scrollTo({ top: 0, behavior: 'smooth' });
+          el.scrollTop = 0;
 
           // TUNGGU 3 DETIK DI ATAS
           
@@ -347,9 +354,9 @@ function startAutoScroll() {
     }
 
     // Jalankan scroll perlahan (0.6 pixel setiap 16ms)
-    el.scrollTop += 0.6;
+    el.scrollTop += 1;
 
-  }, 16);
+  }, 40);
 }
 
 /* ================= AUTO ROTATE ================= */
@@ -480,7 +487,7 @@ body {
 /* =======================================================
    3. TV RAKSASA 72 INCH (4K / Ultra HD)
    ======================================================= */
-@media (min-width: 3800px) {
+@media (min-width: 3900px) {
   /* Skalakan seluruh layout */
   .rectangle_main { height: 450px; }
   .rectangle_one { width: 400px; height: 350px; }
@@ -498,7 +505,7 @@ body {
   }
 
   .custom-table th { font-size: 2.8rem; padding: 30px; }
-  .custom-table td { font-size: 2.5rem; padding: 30px; }
+  .custom-table td { font-size: 2.8rem; padding: 30px;  height: 160px; padding: 20px 30px; }
 
   h2 { font-size: 3rem; border-left-width: 15px; }
 
@@ -535,7 +542,7 @@ label {
 }
 
 .rectangle_main {
-  background-color: #4244e1f0;
+  background-color:#4244e1f0;
   width: 100%;
   border-radius: 0 0 20px 20px;
   height: 256px;
@@ -839,6 +846,7 @@ label {
   position: sticky;
   top: 0;
   z-index: 5;
+  font-size: 28px;
 }
 
 .custom-table tbody {
@@ -846,7 +854,8 @@ label {
   height: 100%;
   overflow-y: hidden;
   width: 100%;
-  font-size: 20px;
+  font-size: 28px;
+  font-weight: 500;
 }
 
 .custom-table thead {
@@ -873,6 +882,9 @@ label {
   flex: 1;
   display: block;
   overflow-y: hidden; 
+  font-size: 20px;
+  will-change: scroll-position;
+  -webkit-overflow-scrolling: touch;
   width: 100%;
 }
 
@@ -894,6 +906,7 @@ label {
   padding: 14px;
   border-bottom: 1px solid #eee;
   font-family: "Poppins-Regular", Helvetica;
+  font-size: 28px;
 }
 
 .custom-table td:nth-child(2) {
@@ -981,8 +994,8 @@ th {
 
 h2 {
   font-family: "Poppins", sans-serif;
-  font-size: 24px;
-  font-weight: 600;
+  font-size: 42px;
+  font-weight: 800;
   color: #2c2c2c;
   margin-bottom: 10px;
   padding-left: 15px;
