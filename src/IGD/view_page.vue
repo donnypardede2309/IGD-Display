@@ -897,7 +897,7 @@ label {
   text-align: left;
   font-weight: 600;
   letter-spacing: 0.5px;
-  color: white;
+  color: rgb(39, 39, 39);
 }
 
 /* Body */

@@ -103,6 +103,7 @@
                 v-model="p.layanan" 
                 @change="updateLayanan(p)">
                   <option value="">Pilih Layanan</option>
+                  <option value="igd"> IGD </option>
                   <option value="laboratorium">Laboratorium</option>
                   <option value="radiologi">Radiologi</option>
                   <option value="rawat-inap">Rawat Inap</option>
@@ -118,6 +119,12 @@
                       {{ r }}
                     </option>
                   </select>
+                </div>
+
+                <div>
+                  <button
+                  @click="hapusPasien(p.id)"
+                  class="hapus">Hapus</button>
                 </div>
 
               </td>
@@ -344,7 +351,7 @@ async function tambahPasien() {
         tanggal: tanggalMasuk.value,
         jam: jamMasuk.value,
         no_TT: nomorTempatTidur.value,
-        status: "Aktif",
+        status: "IGD",
         layanan: "",
         ruangan: ""
       }
@@ -373,9 +380,12 @@ async function tambahPasien() {
 // Update layanan dan ruangan pada database
 async function updateLayanan(p) {
 
-  let statusBaru = "Aktif"
+  let statusBaru = "IGD"
 
   switch (p.layanan) {
+    case "igd":
+      statusBaru = "ruang IGD"
+      break
     case "laboratorium":
       statusBaru = "Proses Laboratorium"
       break
@@ -408,8 +418,37 @@ async function updateLayanan(p) {
 }
 
 /* =====================================================
+   FUNGSI HAPUS DATA PASIEN
+===================================================== */
+
+async function hapusPasien(id) {
+  // Konfirmasi agar data tidak sengaja terhapus
+  const konfirmasi = confirm("Apakah anda yakin ingin menghapus data pasien?")
+
+  if (!konfirmasi) return
+
+  const { error } = await supabase
+    .from('antrian')
+    .delete()
+    .eq('id', id) // Menghapus baris yang ID-nya cocok
+
+  if (error) {
+    console.error(error)
+    alert("Gagal menghapus data!")
+  } else {
+    daftarPasien.value = daftarPasien.value.filter(p => p.id !== id)
+    alert("Data pasien berhasil dihapus")
+  }
+}
+
+
+/* =====================================================
    COMPUTED FILTER PER SECTION
 ===================================================== */
+
+const pasienIGD = computed(() =>
+  daftarPasien.value.filter(p => p.layanan === "igd")
+)
 
 const pasienLabor = computed(() =>
   daftarPasien.value.filter(p => p.layanan === "laboratorium")
@@ -656,8 +695,13 @@ label {
   box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
 }
 
-.batal {
+.hapus {
   background-color: #e04242c7;
+  color: white;
+  width: 120px;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
 }
 
 .kirim {
