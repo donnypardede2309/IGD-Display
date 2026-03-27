@@ -73,6 +73,15 @@
       <!-- ================= IGD ================= -->
       <section v-if="activeSection === 'igd'">
         <h2>Data Pasien IGD</h2>
+        <div class="search-container">
+          <input 
+            type="text" 
+            v-model="searchQuery" 
+            placeholder="Cari pasien..." 
+            style="padding: 10px; width: 100%; max-width: 400px; border-radius: 8px; border: 1px solid #ddd;"
+  />
+          <!-- <button class="cari-btn">Cari</button> -->
+        </div>
         <table class="custom-table">
           <thead class="igd-table-header">
             <tr>
@@ -88,7 +97,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(p,index) in daftarPasien" :key="index">
+            <tr v-for="(p,index) in pasienDaftarSemua" :key="p.id">
               <td>{{ p.nama }}</td>
               <td>{{ p.alamat }}</td>
               <td>{{ p.jenis }}</td>
@@ -104,6 +113,8 @@
                 @change="updateLayanan(p)">
                   <option value="">Pilih Layanan</option>
                   <option value="igd"> IGD </option>
+                  <option value="igd-ponek">IGD Ponek</option>
+                  <option value="pasien-rujuk">Pasien Rujuk</option>
                   <option value="laboratorium">Laboratorium</option>
                   <option value="radiologi">Radiologi</option>
                   <option value="rawat-inap">Rawat Inap</option>
@@ -274,6 +285,7 @@ import { supabase } from '@/lib/supabase'
 
 const activeSection = ref("daftar")
 const setSection = (section) => activeSection.value = section
+const searchQuery = ref("")
 
 // Form input
 const nama = ref("")
@@ -296,7 +308,8 @@ const daftarRuangan = [
   "Ruang Betlehem",
   "Ruang Galsam",
   "Ruang Siloam",
-  "Ruang Efrata (Isolasi)"
+  "Ruang Efrata (Isolasi)",
+  "Ruang ICU"
 ]
 
 /* =====================================================
@@ -351,7 +364,7 @@ async function tambahPasien() {
         tanggal: tanggalMasuk.value,
         jam: jamMasuk.value,
         no_TT: nomorTempatTidur.value,
-        status: "IGD",
+        status: "Observasi IGD",
         layanan: "",
         ruangan: ""
       }
@@ -380,11 +393,17 @@ async function tambahPasien() {
 // Update layanan dan ruangan pada database
 async function updateLayanan(p) {
 
-  let statusBaru = "IGD"
+  let statusBaru = "dirawat"
 
   switch (p.layanan) {
     case "igd":
-      statusBaru = "ruang IGD"
+      statusBaru = "Observasi ruang IGD"
+      break
+    case "igd-ponek":
+      statusBaru = "Observasi IGD Ponek"
+      break
+    case "pasien-rujuk":
+      statusBaru = "Pasien Dirujuk ke RS lain"
       break
     case "laboratorium":
       statusBaru = "Proses Laboratorium"
@@ -445,6 +464,26 @@ async function hapusPasien(id) {
 /* =====================================================
    COMPUTED FILTER PER SECTION
 ===================================================== */
+const filterBySearch = (data) => {
+  if (!searchQuery.value) return data;
+  
+  const query = searchQuery.value.toLowerCase();
+
+  return data.filter(p => {
+    return (
+      p.nama?.toLowerCase().includes(query) ||
+      p.layanan?.toLowerCase().includes(query) ||
+      p.alamat?.toLowerCase().includes(query) ||
+      p.ruangan?.toLowerCase().includes(query) ||
+      p.jenis?.toLowerCase().includes(query)
+    );
+  });
+};
+
+const pasienDaftarSemua = computed(() => {
+  // Kita panggil fungsi filterBySearch untuk semua daftarPasien
+  return filterBySearch(daftarPasien.value)
+})
 
 const pasienIGD = computed(() =>
   daftarPasien.value.filter(p => p.layanan === "igd")
@@ -465,6 +504,8 @@ const pasienRawatInap = computed(() =>
 const pasienPulang = computed(() =>
   daftarPasien.value.filter(p => p.layanan === "pulang")
 )
+
+const daftarTerfilter = computed(() => filterBySearch(daftarPasien.value))
 
 /* =====================================================
    LOAD AWAL
@@ -567,8 +608,6 @@ label {
   top: 36px;
 }
 
-
-
 .text-wrapper {
   position: absolute;
   font-family: "Poppins-Regular", Helvetica;
@@ -666,6 +705,30 @@ label {
 .input-wrapper input::placeholder,
 .input-wrapper select::placeholder {
   color: #757575;
+}
+
+.search-container {
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+  padding-bottom: 10px;
+}
+
+.input-search {
+  width: 300px;
+  height: 30px;
+  border-radius: 5px;
+  border: 1px solid black;
+}
+
+.cari-btn {
+  width: 60px;
+  color: white;
+  padding: 6px 12px;
+  background-color: rgb(54, 54, 255);
+  border: 1px solid #ccc;
+  border-radius: 6px;
+
 }
 
 .button-wrapper {
