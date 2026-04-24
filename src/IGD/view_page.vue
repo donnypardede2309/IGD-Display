@@ -253,10 +253,15 @@ const scrollContainer = ref(null);
 /* ================= FETCH DATA ================= */
 
 async function ambilData() {
+  const tujuhHari = new Date();
+  tujuhHari.setDate(tujuhHari.getDate() - 7);
+
   const { data, error } = await supabase
     .from("antrian")
     .select("*")
-    .order("created_at", { ascending: false });
+    .order("created_at", { ascending: false })
+    .limit(50)
+    .gt('created_at', tujuhHari.toISOString())
 
   if (!error && data) {
     daftarPasien.value = data.map((p) => ({

@@ -317,10 +317,14 @@ const daftarRuangan = [
 ===================================================== */
 
 async function ambilData() {
+  const tujuhHari = new Date();
+  tujuhHari.setDate(tujuhHari.getDate() - 7);
+
   const { data, error } = await supabase
     .from('antrian')
     .select('*')
-    .order('created_at', { ascending: true })
+    .order('id', { ascending: false })
+    .gt('created_at', tujuhHari.toISOString())
 
   if (error) {
     console.error(error)
